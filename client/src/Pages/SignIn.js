@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 
 const SignIn = () => {
   const [user, setUser] = useState({});
+  console.log("rendered");
   let history = useHistory();
 
   const submitNewUser = (e) => {
@@ -19,7 +20,7 @@ const SignIn = () => {
       .then((response) => response.json())
       .then((newUser) => {
         console.log("Success:", newUser);
-        e.preventDefault();
+        // e.preventDefault();
         history.push("/users");
       })
       .catch((error) => {
@@ -28,7 +29,6 @@ const SignIn = () => {
   };
 
   const inputTextHandler = (e) => {
-    // e.preventDefault();
     const value = e.target.value;
     setUser({
       ...user,
@@ -64,9 +64,10 @@ const SignIn = () => {
       <br />
       <label>Birth Day</label>
       <input
-        type="text"
+        type="date"
         name="bDay"
         placeholder="enter Birth Day"
+        max="2020-12-31"
         onChange={inputTextHandler}
       ></input>
       <br />
