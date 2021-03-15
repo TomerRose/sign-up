@@ -2,6 +2,7 @@ import "./App.css";
 import SignIn from "./Pages/SignIn";
 import { Route, BrowserRouter } from "react-router-dom";
 import Users from "./Pages/Users";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

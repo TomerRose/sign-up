@@ -1,5 +1,12 @@
 .App {
+  margin: 50px
+}
+
+h2{
   text-align: center;
 }
 
+.wrapper {
+  text-align: center;
+}
 

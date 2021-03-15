@@ -1,15 +1,36 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import { setUserName } from "../store/index";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
 
-const SignIn = () => {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUserName: (userName) => dispatch(setUserName(userName)),
+  };
+};
+
+const SignIn = ({ setUserName }) => {
   const [user, setUser] = useState({});
-  console.log("rendered");
   let history = useHistory();
 
   const submitNewUser = (e) => {
     e.preventDefault();
-    console.log("form submited");
+
     let newUser = user;
+    if (
+      !user.name ||
+      !user.email ||
+      !user.email ||
+      !user.phoneNum ||
+      !user.bDay ||
+      !user.favAnimal
+    ) {
+      alert("please fill in all the fields");
+      return;
+    }
     fetch("http://localhost:3010/users", {
       method: "POST",
       headers: {
@@ -20,7 +41,8 @@ const SignIn = () => {
       .then((response) => response.json())
       .then((newUser) => {
         console.log("Success:", newUser);
-        // e.preventDefault();
+        console.log("form submited");
+        setUserName(user.name);
         history.push("/users");
       })
       .catch((error) => {
@@ -37,51 +59,64 @@ const SignIn = () => {
   };
 
   return (
-    <form onSubmit={submitNewUser}>
-      <label>name</label>
-      <input
-        type="text"
-        name="name"
-        placeholder="enter name"
-        onChange={inputTextHandler}
-      ></input>
+    <Container>
+      <h2>Login</h2>
       <br />
-      <label>Email</label>
-      <input
-        type="text"
-        name="email"
-        placeholder="enter email"
-        onChange={inputTextHandler}
-      ></input>
-      <br />
-      <label>Phone number</label>
-      <input
-        type="text"
-        name="phoneNum"
-        placeholder="enter phone number"
-        onChange={inputTextHandler}
-      ></input>
-      <br />
-      <label>Birth Day</label>
-      <input
-        type="date"
-        name="bDay"
-        placeholder="enter Birth Day"
-        max="2020-12-31"
-        onChange={inputTextHandler}
-      ></input>
-      <br />
-      <label>Favorite Animal</label>
-      <input
-        type="text"
-        name="favAnimal"
-        placeholder="enter favorite animal"
-        onChange={inputTextHandler}
-      ></input>
-      <br />
-      <button type="submit">submit</button>
-    </form>
+      <Form onSubmit={submitNewUser}>
+        <Form.Label>Name</Form.Label>
+        <Form.Control
+          type="text"
+          name="name"
+          placeholder="Enter Name"
+          onChange={inputTextHandler}
+          required
+        ></Form.Control>
+        <br />
+        <Form.Label>Email</Form.Label>
+        <Form.Control
+          type="email"
+          name="email"
+          placeholder="Enter Email"
+          onChange={inputTextHandler}
+          required
+        ></Form.Control>
+        <br />
+        <Form.Label>Phone Number</Form.Label>
+        <Form.Control
+          type="tel"
+          name="phoneNum"
+          placeholder="Enter Phone Number"
+          onChange={inputTextHandler}
+          required
+        ></Form.Control>
+        <br />
+        <Form.Label>Birthday</Form.Label>
+        <Form.Control
+          type="date"
+          name="bDay"
+          placeholder="Enter Birthday"
+          max="2020-12-31"
+          onChange={inputTextHandler}
+          required
+        ></Form.Control>
+        <br />
+        <Form.Label>Favorite Animal</Form.Label>
+        <Form.Control
+          type="text"
+          name="favAnimal"
+          placeholder="Enter Favorite Animal"
+          onChange={inputTextHandler}
+          required
+        ></Form.Control>
+        <br />
+        <div className="wrapper">
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </div>
+      </Form>
+    </Container>
   );
 };
 
-export default SignIn;
+export default connect(null, mapDispatchToProps)(SignIn);
